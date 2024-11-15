@@ -1,0 +1,31 @@
+<div>
+  {Array.isArray(countryPopulation) && countryPopulation.length > 0 ? (
+    countryPopulation
+      .filter(item => {
+        console.log(item.iso3); 
+        return item.iso3 === countryCode;  
+      })
+      .map((filteredPopulation) => (
+        <div key={filteredPopulation.iso3}>
+          <ul>
+            <li>Population counts:</li>
+            {Array.isArray(filteredPopulation.populationCounts) && filteredPopulation.populationCounts.length > 0 ? (
+              filteredPopulation.populationCounts.map((populationData, index) => (
+                <li key={index}>
+                  {populationData.year}: {populationData.value}
+                </li>
+              ))
+            ) : (
+              <li>No population data available</li>
+            )}
+          </ul>
+        </div>
+      ))
+  ) : (
+    <p>No countries found.</p> 
+  )}
+</div>
+
+
+
+problemas iso3 es diferente a countryCode
