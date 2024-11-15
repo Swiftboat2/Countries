@@ -1,51 +1,35 @@
-Installation
-Clone the Repository
-First, clone the repository to your local machine:
+## Installation
 
-bash
-Copiar código
-git clone https://github.com/Swiftboat2/Countries
-Backend Setup
-Navigate to the backend directory:
+### Backend
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Swiftboat2/Countries
+   ```
 
-bash
-Copiar código
-cd backend
-Install the backend dependencies:
+2. Navigate to the `backend` directory and install dependencies:
+   ```bash
+   cd backend
+   npm install
+   ```
 
-bash
-Copiar código
-npm install
-Start the backend server:
+3. Configure the PostgreSQL database connection.
 
-You can start the server with either of the following commands:
+4. Start the backend server:
+   ```bash
+   npm run dev
+   or
+   node index.js
+   ```
 
-bash
-Copiar código
-npm run dev
-Or:
+### Frontend
+1. Navigate to the `frontend` directory and install dependencies:
+   ```bash
+   cd frontend
+   cd country-info
+   npm install
+   ```
 
-bash
-Copiar código
-node index.js
-Frontend Setup
-Navigate to the frontend directory:
-
-bash
-Copiar código
-cd frontend
-Then, navigate to the country-info directory:
-
-bash
-Copiar código
-cd country-info
-Install the frontend dependencies:
-
-bash
-Copiar código
-npm install
-Start the frontend development server:
-
-bash
-Copiar código
-npm run dev
+2. Start the frontend:
+   ```bash
+   npm run dev
+   ```
