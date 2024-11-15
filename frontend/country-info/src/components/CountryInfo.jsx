@@ -8,9 +8,11 @@ function CountryInfo(){
 
 const [countryInfo, setCountryInfo] = useState(null)
 const [countryFlag, setCountryFlag] = useState([]);
-const [countryPopulation, setCountryPopulation] = useState(null)
-
-    const { countryCode } = useParams()
+const [countryPopulation, setCountryPopulation] = useState([])
+const [filterCountryPopulation, setFilterCountryPopulation] = useState([])
+const [name, setName] = useState('')
+    
+const { countryCode } = useParams()
 
     //console.log("Fetching data for country:", countryCode);
     
@@ -19,46 +21,60 @@ useEffect(() => {
     try {
         const res = await fetch(`http://localhost:3000/getCountryInfo/${countryCode}`)
         const data = await res.json()
-        //console.log(data)
-       
+        console.log(data)
         setCountryInfo(data)
-        }catch (error) {
-            console.error('Failed To fetch Data from the Api:', error)
-            setCountryFlag([]);
-        }
+        setName(data.commonName)
+      }catch (error) {
+        console.error('Failed To fetch Data from the Api:', error)
+        setCountryFlag([]);
+      }
     }
     const fetchCountryFlag = async () => {
-        try {
-            const res = await fetch('http://localhost:3000/getCountryFlag');
-            const data = await res.json();
-            console.log(data);
-    
-            if (Array.isArray(data.data)) {
-                setCountryFlag(data.data);
-            } else {
-                console.error('The answer dont have the requested data:', data);
-                setCountryFlag([]);
-            }
-        } catch (error) {
-            console.error('Failed to fetch data from the API:', error);
-            setCountryFlag([]);
+      try {
+        const res = await fetch('http://localhost:3000/getCountryFlag');
+        const data = await res.json();
+        console.log(data);
+        
+        if (Array.isArray(data.data)) {
+          setCountryFlag(data.data);
+        } else {
+          console.error('The answer dont have the requested data:', data);
+          setCountryFlag([]);
         }
-    };
-    const  fetchCountryPopulation= async () =>{
-        try {
+      } catch (error){
+        console.error('Failed to fetch data from the API:', error);
+            setCountryFlag([]);
+          }
+        };
+        const  fetchCountryPopulation= async () =>{
+          try {
             const res = await fetch(`http://localhost:3000/getCountryPopulation`)
             const data = await res.json()
-            // console.log(data)
+            console.log(data)
             setCountryPopulation(data)
-        }catch (error) {
+            setFilterCountryPopulation(data)
+          }catch (error) {
             console.error('Failed To fetch Data from the Api:', error)
+          }
         }
-    }
-    
-    fetchCountryPopulation()
-    fetchCountryFlag()
-    fetchCountryInfo()
-},[countryCode])
+        
+        fetchCountryPopulation()
+        fetchCountryFlag()
+        fetchCountryInfo()
+      },[countryCode])
+
+
+const Filter = () => {
+  if (name) {
+    const filteredData = countryPopulation.filter(f => f.country === name);
+    setFilterCountryPopulation(filteredData);
+    console.log(filteredData); 
+  }
+};
+
+useEffect(() => {
+  console.log(filterCountryPopulation);
+}, [filterCountryPopulation]);
 
 
 return (
@@ -76,7 +92,6 @@ return (
                 <img className="w-[300px] object-cover" src={filteredFlag.flag} alt={`Flag of ${filteredFlag.iso2}`} />
               </div>
             ))}
-        
         {countryInfo ? (
           <div className="mt-4 mb-4">
             <ul>
@@ -87,18 +102,22 @@ return (
                 <ul>
                   {countryInfo.borders && countryInfo.borders.map((border, index) => (
                     <li key={index}>
-                      <Link to={`/countries/${border.countryCode}`} className="hover:text-blue-500 underline mb-2">{border.officialName}</Link>
+                      <Link to={`/countries/${border.countryCode}`} className="hover:text-blue-500 underline mb-4">{border.officialName}</Link>
                     </li>
                   ))}
                 </ul>
               </li>
             </ul>
-            <div>
-              {Array.isArray(countryPopulation) && countryPopulation.length > 0 ? (
-                countryPopulation
-                  .filter(item => {
-                    console.log(item.country);
-                    return item.country === countryInfo.commonName;
+          </div>
+        ) : (
+          <p>Loading country information...</p>
+        )}
+      </div>
+      <div>
+        {Array.isArray(countryPopulation) && countryPopulation.length >= 0 ? (
+         countryPopulation
+          .filter(item => {
+          return item.country === name;
                   })
                   .map(filteredPopulation => (
                     <div key={filteredPopulation.iso3}>
@@ -120,13 +139,8 @@ return (
                 <p></p>
               )}
             </div>
-          </div>
-        ) : (
-          <p>Loading country information...</p>
-        )}
-      </div>
     </>
   );
-  
 }
+
 export default CountryInfo
