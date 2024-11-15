@@ -31,7 +31,7 @@ useEffect(() => {
         try {
             const res = await fetch('http://localhost:3000/getCountryFlag');
             const data = await res.json();
-            //console.log(data);
+            console.log(data);
     
             if (Array.isArray(data.data)) {
                 setCountryFlag(data.data);
@@ -63,29 +63,31 @@ useEffect(() => {
 
 return (
     <>
-      <div className="mt-10 grid items-center text-center justify-center">
+    <div className="text-start ml-10 mt-5 font-bold hover:text-blue-500 underline">
+      <Link to="/">Back to all countries</Link>
+    </div>
+      <div className="mt-10 grid mx-auto items-center text-center justify-center rounded-3xl shadow-xl w-[400px]  bg-slate-100">
         {Array.isArray(countryFlag) &&
           countryFlag
             .filter(item => item.iso2 === countryCode)
             .map(filteredFlag => (
               <div key={filteredFlag.iso2}>
-                <h1>{filteredFlag.iso2}</h1>
-                <img className="w-[300px]" src={filteredFlag.flag} alt={`Flag of ${filteredFlag.iso2}`} />
+              <h1 className="mb-4 font-bold text-2xl">{filteredFlag.name}</h1>
+                <img className="w-[300px] object-cover" src={filteredFlag.flag} alt={`Flag of ${filteredFlag.iso2}`} />
               </div>
             ))}
         
         {countryInfo ? (
-          <div>
-            <h1>{countryInfo.commonName}</h1>
+          <div className="mt-4 mb-4">
             <ul>
-              <li><strong>Official Name:</strong> {countryInfo.officialName}</li>
-              <li><strong>Region:</strong> {countryInfo.region}</li>
-              <li><strong>Country Code:</strong> {countryInfo.countryCode}</li>
-              <li><strong>Borders:</strong>
+              <li className="font-bold mb-2">Official Name: {countryInfo.officialName}</li>
+              <li className="font-bold mb-2">Region: {countryInfo.region}</li>
+              <li className="font-bold mb-2">Country Code: {countryInfo.countryCode}</li>
+              <li className="font-bold mb-2">Borders:
                 <ul>
                   {countryInfo.borders && countryInfo.borders.map((border, index) => (
                     <li key={index}>
-                      <Link to={`/countries/${border.countryCode}`}>{border.officialName}</Link>
+                      <Link to={`/countries/${border.countryCode}`} className="hover:text-blue-500 underline mb-2">{border.officialName}</Link>
                     </li>
                   ))}
                 </ul>
@@ -115,7 +117,7 @@ return (
                     </div>
                   ))
               ) : (
-                <p>No countries found.</p>
+                <p></p>
               )}
             </div>
           </div>
